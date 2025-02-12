@@ -1,0 +1,14 @@
+Valiables:
+
+# Path
+xpath_calculator: calc.exe
+xpath_calculator_window: Calculator
+xpath_closecalc_button: //Button[@Name="Close Calculator"]
+
+# Navigation
+xpath_navigation_button:  //Button[@Name="Open Navigation"]
+xpath_standard_menu:  //ListItem[@Name="Standard Calculator"]
+xpath_programmer_menu:  //ListItem[@Name="Programmer Calculator"]
+
+# Label
+xpath_memory_label: //TabItem[@AutomationId="MemoryLabel"]

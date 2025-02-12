@@ -2,7 +2,7 @@
 Documentation    ทดสอบเครื่องคิดเลขโดยเปิดโปรแกรมครั้งเดียวและปิดหลังทดสอบเสร็จ
 Library          FlaUILibrary
 Library          Process
-Resource        ./Keywords/Keywords.robot
+Resource        ../Keywords/Keywords.robot
 
 Suite Setup    BeforeTestSetup
 Suite Teardown    AfterTestSetup
@@ -12,23 +12,11 @@ Case 1.1 ทดสอบเครื่องคิดเลขโหมด Stan
     [Documentation]    ตรวจสอบว่าสามารถเปลี่ยนไปยังโหมด Standard ได้
     [Tags]    เครื่องคิดเลข    โหมดมาตรฐาน
     Sleep    1.0s
-
-    Verify Standard Mode
-
-    FlaUILibrary.Click    //Button[@AutomationId="num8Button"]
-    FlaUILibrary.Click    //Button[@AutomationId="num8Button"]
-    FlaUILibrary.Click    //Button[@AutomationId="num8Button"]
-    FlaUILibrary.Click    //Button[@AutomationId="num8Button"]
-    FlaUILibrary.Click    //Button[@AutomationId="num8Button"]
-    
+    # Switch To Standard Mode
+    Repeat Keyword    5 times    FlaUILibrary.Click    //Button[@AutomationId="num8Button"]
     FlaUILibrary.Click    //Button[@Name="Plus"]
 
-    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
-    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
-    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
-    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
-    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
-
+    Repeat Keyword    5 times    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
     FlaUILibrary.Click    //Button[@Name="Equals"]
 
     # ดึงค่าจากเครื่องคิดเลข
@@ -115,47 +103,33 @@ Case 1.4 ทดสอบการปรับย่อ-หน้าจอ
     [Documentation]    ตรวจสอบว่าสามารถปรับหน้าจอได้ถูกต้อง
     [Tags]    หน้าจอ    เครื่องคิดเลข
     Sleep    1.0s
-    FlaUILibrary.Press Key    s'LWIN + RIGHT'
-    # FlaUILibrary.Click    //Button[@Name="Maximize Calculator"]
-    # Sleep    1.0s
-    # FlaUILibrary.Click    //Button[@Name="Restore Calculator"]
-    # Sleep    1.0s
-
-    
+    FlaUILibrary.Click    //Button[@Name="Maximize Calculator"]
+    Sleep    1.0s
+    FlaUILibrary.Click    //Button[@Name="Restore Calculator"]
 
 Case 1.5 ทดสอบการใช้หน่วยความจำ (Memory Functions)
     [Documentation]    ตรวจสอบว่าฟังก์ชัน Memory สามารถทำงานได้
     [Tags]    เครื่องคิดเลข    หน่วยความจำ
-    Sleep    3.0s
-
-    FlaUILibrary.Click    ${xpath_navigation_button}
-    Sleep    1.0s
-    FlaUILibrary.Click    ${xpath_standard_menu}
-    Sleep    1.0s
-    FlaUILibrary.Click    ${xpath_memory_label}
     Sleep    1.0s
 
-    
     # กดเลข 5 และบันทึกค่าลงหน่วยความจำ
     FlaUILibrary.Click    //Button[@AutomationId="num5Button"]
-    FlaUILibrary.Click    //Button[@Name="Memory store"]
+    FlaUILibrary.Click    //Button[@Name="MS"]
     Sleep    1.0s
-    
+
     # กด MR เพื่อนำค่าที่บันทึกไว้กลับมา
-    FlaUILibrary.Click    //Button[@Name="Memory recall"]
+    FlaUILibrary.Click    //Button[@Name="MR"]
     ${memory_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
-    # ลบ "Display is " 
-    ${memory_Result}    Evaluate    "${memory_Result}".replace('Display is ', '').strip()
-
-
-    Should Be Equal As Strings    ${memory_Result}    5
+    Should Be Equal As Strings    ${memory_Result}    "5"
 
     # กด MC เพื่อล้างค่าหน่วยความจำ
-    FlaUILibrary.Click    //Button[@Name="Clear all memory"]
+    FlaUILibrary.Click    //Button[@Name="MC"]
     Sleep    1.0s
 
-    ${exists}    Run Keyword And Return Status    FlaUILibrary.Get Name From Element    //List[@AutomationId="MemoryListView"]
-    Run Keyword If    ${exists}    Fail    "AutomationID CalculatorResults ถูกพบ (ต้องการให้ไม่พบ)"
+    # ตรวจสอบว่า Memory ถูกล้างแล้ว
+    FlaUILibrary.Click    //Button[@Name="MR"]
+    ${memory_Clear_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    Should Be Equal As Strings    ${memory_Clear_Result}    "0"
 
 
 Case 1.6 ทดสอบการคำนวณเปอร์เซ็นต์ (%)
@@ -166,16 +140,16 @@ Case 1.6 ทดสอบการคำนวณเปอร์เซ็นต�
     # ป้อน 50 x 25% และตรวจสอบผลลัพธ์
     FlaUILibrary.Click    //Button[@AutomationId="num5Button"]
     FlaUILibrary.Click    //Button[@AutomationId="num0Button"]
-    FlaUILibrary.Click    //Button[@Name="Multiply by"]
+    FlaUILibrary.Click    //Button[@Name="Multiply"]
     FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
     FlaUILibrary.Click    //Button[@AutomationId="num5Button"]
-    FlaUILibrary.Click    //Button[@Name="Modulo"]
+    FlaUILibrary.Click    //Button[@AutomationId="percentButton"]
     FlaUILibrary.Click    //Button[@Name="Equals"]
 
     ${percent_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
     ${percent_Cleaned}    Evaluate    "${percent_Result}".replace('Display is ', '').replace(',', '').strip()
     
-    Should Be Equal As Strings    ${percent_Cleaned}    12.5
+    Should Be Equal As Strings    ${percent_Cleaned}    "12.5"
 
 
 Case 1.7 ทดสอบ Factorial และ Square Root
@@ -226,7 +200,7 @@ Case 1.8 ทดสอบ Bitwise Operations (AND, OR, XOR, NOT)
     Should Be Equal As Strings    ${bitwise_Cleaned}    "1000"
 
 
-Case 1.10 ปิดโปรแกรมเครื่องคิดเลข
+Case 1.9 ปิดโปรแกรมเครื่องคิดเลข
     [Documentation]    ตรวจสอบว่าสามารถปิดโปรแกรมได้ถูกต้อง
     [Tags]    เครื่องคิดเลข    ปิดโปรแกรม
     Sleep    1.0s
