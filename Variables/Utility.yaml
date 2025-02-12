@@ -9,6 +9,7 @@ xpath_closecalc_button: //Button[@Name="Close Calculator"]
 xpath_navigation_button:  //Button[@Name="Open Navigation"]
 xpath_standard_menu:  //ListItem[@Name="Standard Calculator"]
 xpath_programmer_menu:  //ListItem[@Name="Programmer Calculator"]
+xpath_scientific_menu: //ListItem[@Name="Scientific Calculator"]
 
 # Label
 xpath_memory_label: //TabItem[@AutomationId="MemoryLabel"]

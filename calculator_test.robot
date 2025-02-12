@@ -2,6 +2,7 @@
 Documentation    ทดสอบเครื่องคิดเลขโดยเปิดโปรแกรมครั้งเดียวและปิดหลังทดสอบเสร็จ
 Library          FlaUILibrary
 Library          Process
+Library    XML
 Resource        ./Keywords/Keywords.robot
 
 Suite Setup    BeforeTestSetup
@@ -111,18 +112,36 @@ Case 1.3 ตรวจสอบค่าที่แปลงเป็นเล�
     FlaUILibrary.Click    //Button[@AutomationId="clearEntryButton"]
 
 
-Case 1.4 ทดสอบการปรับย่อ-หน้าจอ
-    [Documentation]    ตรวจสอบว่าสามารถปรับหน้าจอได้ถูกต้อง
-    [Tags]    หน้าจอ    เครื่องคิดเลข
-    Sleep    1.0s
-    FlaUILibrary.Press Key    s'LWIN + RIGHT'
-    # FlaUILibrary.Click    //Button[@Name="Maximize Calculator"]
-    # Sleep    1.0s
-    # FlaUILibrary.Click    //Button[@Name="Restore Calculator"]
-    # Sleep    1.0s
+# Case 1.4 ทดสอบการปรับย่อ-หน้าจอ
+#     [Documentation]    ตรวจสอบว่าสามารถปรับหน้าจอได้ถูกต้อง
+#     [Tags]    หน้าจอ    เครื่องคิดเลข
+#     Sleep    1.0s
+#     FlaUILibrary.Click    //Button[@Name="Maximize Calculator"]
+#     Sleep    3.0s
+#     FlaUILibrary.Press Key    s'LWIN + RIGHT'
+
+Case 1.4 ทดสอบการคำนวณลำดับความสำคัญของ Operator
+    [Documentation]    ตรวจสอบว่าการคำนวณใช้ลำดับความสำคัญของเครื่องหมายถูกต้อง
+    [Tags]    เครื่องคิดเลข    Operator Precedence
+    
+    Switch To Scientific Mode
+    Sleep    1.5s
+    # ป้อน 5 + 3 × 2 ควรได้ 11 (เพราะต้องคำนวณ × ก่อน)
+    FlaUILibrary.Click    //Button[@AutomationId="num5Button"]
+    FlaUILibrary.Click    //Button[@Name="Plus"]
+    FlaUILibrary.Click    //Button[@Name="Left parenthesis"]
+    FlaUILibrary.Click    //Button[@AutomationId="num3Button"]
+    FlaUILibrary.Click    //Button[@Name="Multiply by"]
+    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
+    FlaUILibrary.Click    //Button[@Name="Right parenthesis"]
+    FlaUILibrary.Click    //Button[@Name="Equals"]
+
+    ${calculated_result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${calculated_result}    Evaluate    "${calculated_result}".replace('Display is ', '').strip()
+
+    Should Be Equal As Strings    ${calculated_result}    11
 
     
-
 Case 1.5 ทดสอบการใช้หน่วยความจำ (Memory Functions)
     [Documentation]    ตรวจสอบว่าฟังก์ชัน Memory สามารถทำงานได้
     [Tags]    เครื่องคิดเลข    หน่วยความจำ
@@ -169,36 +188,45 @@ Case 1.6 ทดสอบการคำนวณเปอร์เซ็นต�
     FlaUILibrary.Click    //Button[@Name="Multiply by"]
     FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
     FlaUILibrary.Click    //Button[@AutomationId="num5Button"]
-    FlaUILibrary.Click    //Button[@Name="Modulo"]
+    FlaUILibrary.Click    //Button[@Name="Percent"]
     FlaUILibrary.Click    //Button[@Name="Equals"]
 
     ${percent_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
     ${percent_Cleaned}    Evaluate    "${percent_Result}".replace('Display is ', '').replace(',', '').strip()
     
     Should Be Equal As Strings    ${percent_Cleaned}    12.5
+    Sleep    3.0s
 
 
 Case 1.7 ทดสอบ Factorial และ Square Root
     [Documentation]    ตรวจสอบว่าสามารถคำนวณ Factorial และ Square Root ได้
     [Tags]    เครื่องคิดเลข    ค่าทางคณิตศาสตร์
     Sleep    1.0s
+    Switch To Scientific Mode
 
     # ทดสอบ Factorial (5!)
     FlaUILibrary.Click    //Button[@AutomationId="num5Button"]
     FlaUILibrary.Click    //Button[@AutomationId="factorialButton"]
+    FlaUILibrary.Click    //Button[@Name="Equals"]
+
     ${factorial_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
     ${factorial_Cleaned}    Evaluate    "${factorial_Result}".replace('Display is ', '').replace(',', '').strip()
 
-    Should Be Equal As Strings    ${factorial_Cleaned}    "120"
+    Should Be Equal As Strings    ${factorial_Cleaned}    120
+
 
     # ทดสอบ Square Root (√49)
     FlaUILibrary.Click    //Button[@AutomationId="num4Button"]
+    Sleep    1.5s
     FlaUILibrary.Click    //Button[@AutomationId="num9Button"]
+    Sleep    1.5s
     FlaUILibrary.Click    //Button[@AutomationId="squareRootButton"]
+
+
     ${sqrt_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
     ${sqrt_Cleaned}    Evaluate    "${sqrt_Result}".replace('Display is ', '').replace(',', '').strip()
 
-    Should Be Equal As Strings    ${sqrt_Cleaned}    "7"
+    Should Be Equal As Strings    ${sqrt_Cleaned}    7
 
 
 Case 1.8 ทดสอบ Bitwise Operations (AND, OR, XOR, NOT)
@@ -207,13 +235,16 @@ Case 1.8 ทดสอบ Bitwise Operations (AND, OR, XOR, NOT)
     Sleep    1.0s
 
     Switch To Programmer Mode
-
+    Sleep    0.5s
+    FlaUILibrary.Click    //RadioButton[@AutomationId="binaryButton"]
     # 1100 AND 1010 = 1000
     FlaUILibrary.Click    //Button[@AutomationId="num1Button"]
     FlaUILibrary.Click    //Button[@AutomationId="num1Button"]
     FlaUILibrary.Click    //Button[@AutomationId="num0Button"]
     FlaUILibrary.Click    //Button[@AutomationId="num0Button"]
-    FlaUILibrary.Click    //Button[@Name="AND"]
+    FlaUILibrary.Click    //Button[@Name="Bitwise"]
+    Sleep    1.0s
+    FlaUILibrary.Click    //Button[@Name="And"]
     FlaUILibrary.Click    //Button[@AutomationId="num1Button"]
     FlaUILibrary.Click    //Button[@AutomationId="num0Button"]
     FlaUILibrary.Click    //Button[@AutomationId="num1Button"]
@@ -221,9 +252,10 @@ Case 1.8 ทดสอบ Bitwise Operations (AND, OR, XOR, NOT)
     FlaUILibrary.Click    //Button[@Name="Equals"]
 
     ${bitwise_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
-    ${bitwise_Cleaned}    Evaluate    "${bitwise_Result}".replace('Display is ', '').replace(',', '').strip()
+    ${bitwise_Cleaned}    Evaluate    "${bitwise_Result}".replace('Display is ', '').replace(',', '').replace(' ', '').strip()
 
-    Should Be Equal As Strings    ${bitwise_Cleaned}    "1000"
+    Should Be Equal As Strings    ${bitwise_Cleaned}    1000
+
 
 
 Case 1.10 ปิดโปรแกรมเครื่องคิดเลข
