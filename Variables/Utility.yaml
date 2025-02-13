@@ -8,6 +8,7 @@ xpath_closecalc_button: //Button[@Name="Close Calculator"]
 # Navigation
 xpath_navigation_button:  //Button[@Name="Open Navigation"]
 xpath_standard_menu:  //ListItem[@Name="Standard Calculator"]
+xpath_scientific_menu: //ListItem[@Name="Scientific Calculator"]
 xpath_programmer_menu:  //ListItem[@Name="Programmer Calculator"]
 
 # Label

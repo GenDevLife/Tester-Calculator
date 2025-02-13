@@ -169,7 +169,7 @@ Case 1.6 ทดสอบการคำนวณเปอร์เซ็นต�
     FlaUILibrary.Click    //Button[@Name="Multiply by"]
     FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
     FlaUILibrary.Click    //Button[@AutomationId="num5Button"]
-    FlaUILibrary.Click    //Button[@Name="Modulo"]
+    FlaUILibrary.Click    //Button[@Name="Percent"]
     FlaUILibrary.Click    //Button[@Name="Equals"]
 
     ${percent_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
@@ -184,12 +184,14 @@ Case 1.7 ทดสอบ Factorial และ Square Root
     Sleep    1.0s
 
     # ทดสอบ Factorial (5!)
+    Switch To Scientific Mode
+
     FlaUILibrary.Click    //Button[@AutomationId="num5Button"]
     FlaUILibrary.Click    //Button[@AutomationId="factorialButton"]
     ${factorial_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
     ${factorial_Cleaned}    Evaluate    "${factorial_Result}".replace('Display is ', '').replace(',', '').strip()
 
-    Should Be Equal As Strings    ${factorial_Cleaned}    "120"
+    Should Be Equal As Strings    ${factorial_Cleaned}    120
 
     # ทดสอบ Square Root (√49)
     FlaUILibrary.Click    //Button[@AutomationId="num4Button"]
@@ -198,7 +200,7 @@ Case 1.7 ทดสอบ Factorial และ Square Root
     ${sqrt_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
     ${sqrt_Cleaned}    Evaluate    "${sqrt_Result}".replace('Display is ', '').replace(',', '').strip()
 
-    Should Be Equal As Strings    ${sqrt_Cleaned}    "7"
+    Should Be Equal As Strings    ${sqrt_Cleaned}    7
 
 
 Case 1.8 ทดสอบ Bitwise Operations (AND, OR, XOR, NOT)
@@ -213,17 +215,19 @@ Case 1.8 ทดสอบ Bitwise Operations (AND, OR, XOR, NOT)
     FlaUILibrary.Click    //Button[@AutomationId="num1Button"]
     FlaUILibrary.Click    //Button[@AutomationId="num0Button"]
     FlaUILibrary.Click    //Button[@AutomationId="num0Button"]
-    FlaUILibrary.Click    //Button[@Name="AND"]
+    FlaUILibrary.Click    //Button[@AutomationId="bitwiseButton"]
+    FlaUILibrary.Click    //Button[@Name="And"]
     FlaUILibrary.Click    //Button[@AutomationId="num1Button"]
     FlaUILibrary.Click    //Button[@AutomationId="num0Button"]
     FlaUILibrary.Click    //Button[@AutomationId="num1Button"]
     FlaUILibrary.Click    //Button[@AutomationId="num0Button"]
     FlaUILibrary.Click    //Button[@Name="Equals"]
+    FlaUILibrary.Click    //RadioButton[@AutomationId="octolButton"]
 
     ${bitwise_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
-    ${bitwise_Cleaned}    Evaluate    "${bitwise_Result}".replace('Display is ', '').replace(',', '').strip()
+    ${bitwise_Cleaned}    Evaluate    "${bitwise_Result}".replace('Display is ', '').replace(',', '').replace(' ', '').strip()
 
-    Should Be Equal As Strings    ${bitwise_Cleaned}    "1000"
+    Should Be Equal As Strings    ${bitwise_Cleaned}    100
 
 
 Case 1.10 ปิดโปรแกรมเครื่องคิดเลข
