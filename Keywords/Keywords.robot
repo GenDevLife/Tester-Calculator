@@ -27,6 +27,11 @@ Switch To Standard Mode
     Sleep    1s
     FlaUILibrary.Click    ${xpath_standard_menu}
 
+Switch To Scientific Mode
+    FlaUILibrary.Click    ${xpath_navigation_button}
+    Sleep    1.0s
+    FlaUILibrary.Click    ${xpath_scientific_menu}
+
 Switch To Programmer Mode
     FlaUILibrary.Click    ${xpath_navigation_button}
     Sleep    1s
