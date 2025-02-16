@@ -7,6 +7,7 @@ Resource        ./Keywords/Keywords.robot
 Suite Setup    BeforeTestSetup
 Suite Teardown    AfterTestSetup
 
+
 *** Test Cases ***
 Case 1.1 ทดสอบเครื่องคิดเลขโหมด Standard
     [Documentation]    ตรวจสอบว่าสามารถเปลี่ยนไปยังโหมด Standard ได้
@@ -32,7 +33,7 @@ Case 1.1 ทดสอบเครื่องคิดเลขโหมด Stan
     FlaUILibrary.Click    //Button[@Name="Equals"]
 
     # ดึงค่าจากเครื่องคิดเลข
-    ${actual_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${actual_Result}    Get Name From Element    ${xpath_result_label}
 
     # ลบเครื่องหมายจุลภาค (,) ออกจากตัวเลข และตัด "Display is "
     ${actual_Result_Cleaned}    Evaluate    "${actual_Result}".replace('Display is ', '').replace(',', '').strip()
@@ -62,7 +63,7 @@ Case 1.2 คัดลอกผลลัพธ์และเปลี่ยน�
     END
 
     # ดึงค่าที่ถูกแปลงเป็นเลขฐานอื่นๆ ในโหมด Programmer
-    ${programmer_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${programmer_Result}    Get Name From Element    ${xpath_result_label}
     Log    ${programmer_Result}
 
     # ลบ "Display is " และเครื่องหมายจุลภาค (,) ออก
@@ -79,22 +80,22 @@ Case 1.3 ตรวจสอบค่าที่แปลงเป็นเล�
     # คลิกที่ปุ่ม HEX และดึงค่า
     FlaUILibrary.Click    //RadioButton[@AutomationId="hexButton"]
     Sleep    1.5s
-    ${HEX_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${HEX_Result}    Get Name From Element    ${xpath_result_label}
     
     # คลิกที่ปุ่ม DEC และดึงค่า
     FlaUILibrary.Click    //RadioButton[@AutomationId="decimalButton"]
     Sleep    1.5s
-    ${DEC_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${DEC_Result}    Get Name From Element    ${xpath_result_label}
 
     # คลิกที่ปุ่ม OCT และดึงค่า
     FlaUILibrary.Click    //RadioButton[@AutomationId="octolButton"]
     Sleep    1.5s
-    ${OCT_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${OCT_Result}    Get Name From Element    ${xpath_result_label}
 
     # คลิกที่ปุ่ม BIN และดึงค่า
     FlaUILibrary.Click    //RadioButton[@AutomationId="binaryButton"]
     Sleep    1.5s
-    ${BIN_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${BIN_Result}    Get Name From Element    ${xpath_result_label}
 
     # ลบช่องว่างและจุลภาคออกจากค่าที่ได้
     ${HEX_Cleaned}    Evaluate    "${HEX_Result}".replace('Display is ', '').replace(' ', '').replace(',', '').strip()
@@ -120,7 +121,7 @@ Case 1.4 ทดสอบการปรับย่อ-หน้าจอ
     # Sleep    1.0s
     # FlaUILibrary.Click    //Button[@Name="Restore Calculator"]
     # Sleep    1.0s
-
+    FlaUILibrary.Focus    ${xpath_calculator_window}
     
 
 Case 1.5 ทดสอบการใช้หน่วยความจำ (Memory Functions)
@@ -143,7 +144,7 @@ Case 1.5 ทดสอบการใช้หน่วยความจำ (Mem
     
     # กด MR เพื่อนำค่าที่บันทึกไว้กลับมา
     FlaUILibrary.Click    //Button[@Name="Memory recall"]
-    ${memory_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${memory_Result}    Get Name From Element    ${xpath_result_label}
     # ลบ "Display is " 
     ${memory_Result}    Evaluate    "${memory_Result}".replace('Display is ', '').strip()
 
@@ -172,7 +173,7 @@ Case 1.6 ทดสอบการคำนวณเปอร์เซ็นต�
     FlaUILibrary.Click    //Button[@Name="Percent"]
     FlaUILibrary.Click    //Button[@Name="Equals"]
 
-    ${percent_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${percent_Result}    Get Name From Element    ${xpath_result_label}
     ${percent_Cleaned}    Evaluate    "${percent_Result}".replace('Display is ', '').replace(',', '').strip()
     
     Should Be Equal As Strings    ${percent_Cleaned}    12.5
@@ -188,16 +189,16 @@ Case 1.7 ทดสอบ Factorial และ Square Root
 
     FlaUILibrary.Click    //Button[@AutomationId="num5Button"]
     FlaUILibrary.Click    //Button[@AutomationId="factorialButton"]
-    ${factorial_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${factorial_Result}    Get Name From Element    ${xpath_result_label}
     ${factorial_Cleaned}    Evaluate    "${factorial_Result}".replace('Display is ', '').replace(',', '').strip()
-
+    
     Should Be Equal As Strings    ${factorial_Cleaned}    120
 
     # ทดสอบ Square Root (√49)
     FlaUILibrary.Click    //Button[@AutomationId="num4Button"]
     FlaUILibrary.Click    //Button[@AutomationId="num9Button"]
     FlaUILibrary.Click    //Button[@AutomationId="squareRootButton"]
-    ${sqrt_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${sqrt_Result}    Get Name From Element    ${xpath_result_label}
     ${sqrt_Cleaned}    Evaluate    "${sqrt_Result}".replace('Display is ', '').replace(',', '').strip()
 
     Should Be Equal As Strings    ${sqrt_Cleaned}    7
@@ -207,7 +208,7 @@ Case 1.8 ทดสอบ Bitwise Operations (AND, OR, XOR, NOT)
     [Documentation]    ตรวจสอบว่าสามารถใช้ฟังก์ชัน Bitwise ได้ในโหมด Programmer
     [Tags]    เครื่องคิดเลข    โหมดโปรแกรมเมอร์    Bitwise
     Sleep    1.0s
-
+    
     Switch To Programmer Mode
 
     # 1100 AND 1010 = 1000
@@ -223,18 +224,279 @@ Case 1.8 ทดสอบ Bitwise Operations (AND, OR, XOR, NOT)
     FlaUILibrary.Click    //Button[@AutomationId="num0Button"]
     FlaUILibrary.Click    //Button[@Name="Equals"]
     FlaUILibrary.Click    //RadioButton[@AutomationId="octolButton"]
-
-    ${bitwise_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${bitwise_Result}    Get Name From Element    ${xpath_result_label}
     ${bitwise_Cleaned}    Evaluate    "${bitwise_Result}".replace('Display is ', '').replace(',', '').replace(' ', '').strip()
-
     Should Be Equal As Strings    ${bitwise_Cleaned}    100
 
 
-Case 1.10 ปิดโปรแกรมเครื่องคิดเลข
+Case 1.9 ทดสอบฟังก์ชันตรีโกณ (Trigonometric Functions)
+    [Documentation]    สลับไปโหมด Scientific แล้วทดสอบฟังก์ชัน sin, cos และ tan
+    
+    Switch To Scientific Mode
+
+    # ทดสอบ sin(30°) คาดว่าผลลัพธ์เป็น 0.5
+    FlaUILibrary.Click    //Button[@AutomationId="clearButton"]
+    FlaUILibrary.Click    //Button[@AutomationId="num3Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num0Button"]
+    FlaUILibrary.Click    ${xpath_trigonometry_button}
+    FlaUILibrary.Click    ${xpath_sin_button}
+    FlaUILibrary.Click    //Button[@Name="Equals"]
+    ${sin_result}    Get Name From Element    ${xpath_result_label}
+    ${sin_cleaned}    Evaluate    "${sin_result}".replace('Display is ', '').strip()
+    Should Be Equal As Strings    ${sin_cleaned}    0.5
+    
+    # ทดสอบ cos(60°) คาดว่าผลลัพธ์เป็น 0.5
+    FlaUILibrary.Click    //Button[@AutomationId="clearEntryButton"]
+    FlaUILibrary.Click    //Button[@AutomationId="num6Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num0Button"]
+    FlaUILibrary.Click    ${xpath_trigonometry_button}
+    FlaUILibrary.Click    ${xpath_cos_button}
+    FlaUILibrary.Click    //Button[@Name="Equals"]
+    ${cos_result}    Get Name From Element    ${xpath_result_label}
+    ${cos_cleaned}    Evaluate    "${cos_result}".replace('Display is ', '').strip()
+    Should Be Equal As Strings    ${cos_cleaned}    0.5
+    
+    # ทดสอบ tan(45°) คาดว่าผลลัพธ์เป็น 1
+    FlaUILibrary.Click    //Button[@AutomationId="clearEntryButton"]
+    FlaUILibrary.Click    //Button[@AutomationId="num4Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num5Button"]
+    FlaUILibrary.Click    ${xpath_trigonometry_button}
+    FlaUILibrary.Click    ${xpath_tan_button}
+    FlaUILibrary.Click    //Button[@Name="Equals"]
+    ${tan_result}    Get Name From Element    ${xpath_result_label}
+    ${tan_cleaned}    Evaluate    "${tan_result}".replace('Display is ', '').strip()
+    Should Be Equal As Strings    ${tan_cleaned}    1
+
+Case 1.10 ทดสอบฟังก์ชันลอการิทึมและยกกำลัง (Logarithmic and Exponential Functions)
+    [Documentation]    สลับไปโหมด Scientific แล้วทดสอบฟังก์ชัน log10 กับการคำนวณยกกำลัง (x^y)
+    
+    Clear Result
+
+    # ทดสอบ log(100) คาดว่าผลลัพธ์เป็น 2
+    # FlaUILibrary.Click    //Button[@AutomationId="clearButton"]
+    FlaUILibrary.Click    //Button[@AutomationId="num1Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num0Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num0Button"]
+    FlaUILibrary.Click    //Button[@Name="Log"]
+    FlaUILibrary.Click    //Button[@Name="Equals"]
+    ${log_result}    Get Name From Element    ${xpath_result_label}
+    ${log_cleaned}    Evaluate    "${log_result}".replace('Display is ', '').strip()
+    Should Be Equal As Strings    ${log_cleaned}    2
+    
+    # ทดสอบ 2^3 คาดว่าผลลัพธ์เป็น 8
+    FlaUILibrary.Click    //Button[@AutomationId="clearEntryButton"]
+    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="powerButton"]
+    FlaUILibrary.Click    //Button[@AutomationId="num3Button"]
+    FlaUILibrary.Click    //Button[@Name="Equals"]
+    ${power_result}    Get Name From Element    ${xpath_result_label}
+    ${power_cleaned}    Evaluate    "${power_result}".replace('Display is ', '').strip()
+    Should Be Equal As Strings    ${power_cleaned}    8
+
+Case 1.11 ทดสอบฟังก์ชันกลับค่า (Reciprocal Function)
+    [Documentation]    สลับไปโหมด Scientific แล้วทดสอบฟังก์ชัน 1/x สำหรับค่า 4 คาดว่าผลลัพธ์เป็น 0.25
+    
+    Switch To Scientific Mode
+    
+    FlaUILibrary.Click    //Button[@AutomationId="clearEntryButton"]
+    FlaUILibrary.Click    //Button[@AutomationId="num4Button"]
+    FlaUILibrary.Click    //Button[@Name="Reciprocal"]
+    ${reciprocal_result}    Get Name From Element    ${xpath_result_label}
+    ${reciprocal_cleaned}    Evaluate    "${reciprocal_result}".replace('Display is ', '').strip()
+    Should Be Equal As Strings    ${reciprocal_cleaned}    0.25
+
+Case 1.12 ทดสอบฟังก์ชันเปลี่ยนเครื่องหมาย (Plus/Minus Toggle)
+    [Documentation]    ทดสอบการสลับเครื่องหมายบวก/ลบ โดยป้อนค่า 25 แล้วกดปุ่มเปลี่ยนเครื่องหมาย คาดว่าจะแสดงเป็น -25
+    
+    Switch To Standard Mode
+    
+    FlaUILibrary.Click    //Button[@AutomationId="clearEntryButton"]
+    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num5Button"]
+    FlaUILibrary.Click    //Button[@Name="Positive negative"]
+    ${toggle_result}    Get Name From Element    ${xpath_result_label}
+    ${toggle_cleaned}    Evaluate    "${toggle_result}".replace('Display is ', '').strip()
+    Should Be Equal As Strings    ${toggle_cleaned}    -25
+
+Case 1.13 ทดสอบฟังก์ชัน Backspace (ลบหลักสุดท้าย)
+    [Documentation]    ทดสอบการใช้งานปุ่ม Backspace เพื่อลบหลักสุดท้ายของตัวเลขที่ป้อนเข้าไป
+    
+    Switch To Standard Mode
+    
+    FlaUILibrary.Click    //Button[@AutomationId="clearEntryButton"]
+    FlaUILibrary.Click    //Button[@AutomationId="num1Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num3Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num4Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num5Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="backSpaceButton"]
+    ${backspace_result}    Get Name From Element    ${xpath_result_label}
+    ${backspace_cleaned}    Evaluate    "${backspace_result}".replace('Display is ', '').strip()
+    Should Be Equal As Strings    ${backspace_cleaned}    1,234
+
+
+Case 1.14 Convert Temperature: Celsius to Fahrenheit
+    [Documentation]    แปลงอุณหภูมิจาก Celsius เป็น Fahrenheit: 100°C คาดว่าผลลัพธ์จะเป็น 212°F
+    Sleep    1.0s
+
+    Switch To Temperature Mode
+    
+    FlaUILibrary.Click    //ComboBox[@Name="Input unit"]
+    Sleep    0.5s
+    FlaUILibrary.Click    //Text[@Name="Celsius"]
+    Sleep    0.5s
+    FlaUILibrary.Click    //ComboBox[@Name="Output unit"]
+    Sleep    0.5s
+    FlaUILibrary.Click    //Text[@Name="Fahrenheit"]
+    Sleep    0.5s
+    FlaUILibrary.Click    //Text[@AutomationId="Value1"]
+    FlaUILibrary.Click    //Button[@AutomationId="num1Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num0Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num0Button"]
+    ${result}    Get Name From Element    //Text[@AutomationId="Value2"]
+    ${result_cleaned}    Evaluate    re.sub(r'[^0-9.-]', '', "${result}")    re
+    Should Contain    ${result_cleaned}    212
+
+    FlaUILibrary.Click    //Button[@AutomationId="ClearEntryButtonPos0"]
+
+
+Case 1.15 Convert Temperature: Fahrenheit to Celsius
+    [Documentation]    แปลงอุณหภูมิจาก Fahrenheit เป็น Celsius: 212°F คาดว่าผลลัพธ์จะเป็น 100°C
+    Sleep    1.0s
+
+    FlaUILibrary.Click    //ComboBox[@Name="Input unit"]
+    Sleep    2.0s
+    FlaUILibrary.Click    //Text[@Name="Fahrenheit"]
+    Sleep    1.0s
+    FlaUILibrary.Click    //ComboBox[@Name="Output unit"]
+    Sleep    0.5s
+    FlaUILibrary.Click    //Text[@Name="Celsius"]
+    Sleep    0.5s
+    FlaUILibrary.Click    //Text[@AutomationId="Value1"]
+    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num1Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
+    ${result}    Get Name From Element    //Text[@AutomationId="Value2"]
+    ${result_cleaned}    Evaluate    re.sub(r'[^0-9.-]', '', "${result}")    re
+    Should Contain    ${result_cleaned}    100
+
+    FlaUILibrary.Click    //Button[@AutomationId="ClearEntryButtonPos0"]
+
+Case 1.16 Convert Temperature: Celsius to Kelvin
+    [Documentation]    แปลงอุณหภูมิจาก Celsius เป็น Kelvin: 25°C คาดว่าผลลัพธ์จะอยู่ที่ประมาณ 298.15K
+
+    FlaUILibrary.Click    //ComboBox[@Name="Input unit"]
+    Sleep    2.0s
+    FlaUILibrary.Click    //Text[@Name="Celsius"]
+    Sleep    1.0s
+    FlaUILibrary.Click    //ComboBox[@Name="Output unit"]
+    Sleep    0.5s
+    FlaUILibrary.Click    //Text[@Name="Kelvin"]
+    Sleep    0.5s
+    FlaUILibrary.Click    //Text[@AutomationId="Value1"]
+    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num5Button"]
+    Sleep    1.0s
+    ${result}    Get Name From Element    //Text[@AutomationId="Value2"]
+    ${result_cleaned}    Evaluate    re.sub(r'[^0-9.-]', '', "${result}")    re
+    Should Contain    ${result_cleaned}    298.15
+
+    FlaUILibrary.Click    //Button[@AutomationId="ClearEntryButtonPos0"]
+
+Case 1.17 Convert Length: Kilometers to Miles
+    [Documentation]    แปลงหน่วยความยาว: 1 Kilometer คาดว่าผลลัพธ์จะเป็นประมาณ 0.62137 Miles
+
+    Switch To Length Mode
+    
+    FlaUILibrary.Click    //ComboBox[@Name="Input unit"]
+    Sleep    2.0s
+    FlaUILibrary.Click    //Text[@Name="Kilometers"]
+    Sleep    1.0s
+    FlaUILibrary.Click    //ComboBox[@Name="Output unit"]
+    Sleep    0.5s
+    FlaUILibrary.Click    //ListItem[@Name="Miles"]
+    Sleep    0.5s
+    FlaUILibrary.Click    //Button[@AutomationId="num1Button"]
+    Sleep    1.0s
+    ${result}    Get Name From Element    //Text[@AutomationId="Value2"]
+    ${result_cleaned}    Evaluate    re.sub(r'[^0-9.-]', '', "${result}")    re
+    Should Contain    ${result_cleaned}    0.62137
+
+    FlaUILibrary.Click    //Button[@AutomationId="ClearEntryButtonPos0"]
+
+Case 1.18 Convert Length: Meters to Feet
+    [Documentation]    แปลงหน่วยความยาว: 1 Meter คาดว่าผลลัพธ์จะเป็นประมาณ 3.28084 Feet
+    
+    FlaUILibrary.Click    //ComboBox[@Name="Input unit"]
+    Sleep    2.0s
+    FlaUILibrary.Click    //Text[@Name="Meters"]
+    Sleep    1.0s
+    FlaUILibrary.Click    //ComboBox[@Name="Output unit"]
+    Sleep    0.5s
+    FlaUILibrary.Click    //ListItem[@Name="Feet"]
+    Sleep    0.5s
+    FlaUILibrary.Click    //Button[@AutomationId="num1Button"]
+    Sleep    1.0s
+    ${result}    Get Name From Element    //Text[@AutomationId="Value2"]
+    ${result_cleaned}    Evaluate    re.sub(r'[^0-9.-]', '', "${result}")    re
+    Should Contain    ${result_cleaned}    3.28084
+
+    FlaUILibrary.Click    //Button[@AutomationId="ClearEntryButtonPos0"]
+
+Case 1.19 Convert Weight: Kilograms to Pounds
+    [Documentation]    แปลงหน่วยน้ำหนัก: 1 Kilogram คาดว่าผลลัพธ์จะเป็นประมาณ 2.20462 Pounds
+    
+    Switch To Weight Mode
+
+    FlaUILibrary.Click    //ComboBox[@Name="Input unit"]
+    Sleep    2.0s
+    FlaUILibrary.Click    //Text[@Name="Kilograms"]
+    Sleep    1.0s
+    FlaUILibrary.Click    //ComboBox[@Name="Output unit"]
+    Sleep    0.5s
+    FlaUILibrary.Click    //ListItem[@Name="Pounds"]
+    Sleep    0.5s
+    FlaUILibrary.Click    //Button[@AutomationId="num1Button"]
+    Sleep    1.0s
+    ${result}    Get Name From Element    //Text[@AutomationId="Value2"]
+    ${result_cleaned}    Evaluate    re.sub(r'[^0-9.-]', '', "${result}")    re
+    Should Contain    ${result_cleaned}    2.20462
+
+    FlaUILibrary.Click    //Button[@AutomationId="ClearEntryButtonPos0"]
+
+Case 1.20 Convert Weight: Pounds to Kilograms
+    [Documentation]    แปลงหน่วยน้ำหนัก: 2.20462 Pounds คาดว่าผลลัพธ์จะเป็นประมาณ 1 Kilogram
+    
+    FlaUILibrary.Click    //ComboBox[@Name="Input unit"]
+    Sleep    2.0s
+    FlaUILibrary.Click    //Text[@Name="Pounds"]
+    Sleep    1.0s
+    FlaUILibrary.Click    //ComboBox[@Name="Output unit"]
+    Sleep    0.5s
+    FlaUILibrary.Click    //ListItem[@Name="Kilograms"]
+    Sleep    0.5s
+    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="decimalSeparatorButton"]
+    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num0Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num4Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num6Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
+    FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
+    Sleep    1.0s
+    ${result}    Get Name From Element    //Text[@AutomationId="Value2"]
+    ${result_cleaned}    Evaluate    re.sub(r'[^0-9.-]', '', "${result}")    re
+    Should Contain    ${result_cleaned}    1
+
+    FlaUILibrary.Click    //Button[@AutomationId="ClearEntryButtonPos0"]
+
+Case 1.21 ปิดโปรแกรมเครื่องคิดเลข
     [Documentation]    ตรวจสอบว่าสามารถปิดโปรแกรมได้ถูกต้อง
     [Tags]    เครื่องคิดเลข    ปิดโปรแกรม
     Sleep    1.0s
 
     # ปิดโปรแกรมเครื่องคิดเลขโดยคลิกปุ่มปิด
-    FlaUILibrary.Click    //Button[@AutomationId="Close"]
-    Sleep    2.0s
+    Switch To Standard Mode
+
+    FlaUILibrary.Focus    ${xpath_calculator_window}
+    Sleep    1.0s
