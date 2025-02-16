@@ -2,14 +2,23 @@ Valiables:
 
 # Path
 xpath_calculator: calc.exe
-xpath_calculator_window: Calculator
+xpath_calculator_window: //Window[@Name="Calculator"]
 xpath_closecalc_button: //Button[@Name="Close Calculator"]
+xpath_menu_windows: //Window[@AutomationId="PaneRoot"]
 
 # Navigation
 xpath_navigation_button:  //Button[@Name="Open Navigation"]
 xpath_standard_menu:  //ListItem[@Name="Standard Calculator"]
-xpath_programmer_menu:  //ListItem[@Name="Programmer Calculator"]
 xpath_scientific_menu: //ListItem[@Name="Scientific Calculator"]
+xpath_programmer_menu:  //ListItem[@Name="Programmer Calculator"]
 
 # Label
+xpath_result_label: //Text[@AutomationId="CalculatorResults"]
 xpath_memory_label: //TabItem[@AutomationId="MemoryLabel"]
+xpath_scroll_scrollbar: //ScrollBar[@AutomationId="VerticalScrollBar"]
+
+# sin, cos, tan and more
+xpath_trigonometry_button: //Button[@Name="Trigonometry"]
+xpath_sin_button: //Button[@Name="Sine"]
+xpath_cos_button: //Button[@Name="Cosine"]
+xpath_tan_button: //Button[@Name="Tangent"]

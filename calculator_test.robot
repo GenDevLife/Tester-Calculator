@@ -8,6 +8,7 @@ Resource        ./Keywords/Keywords.robot
 Suite Setup    BeforeTestSetup
 Suite Teardown    AfterTestSetup
 
+
 *** Test Cases ***
 Case 1.1 ทดสอบเครื่องคิดเลขโหมด Standard
     [Documentation]    ตรวจสอบว่าสามารถเปลี่ยนไปยังโหมด Standard ได้
@@ -33,7 +34,7 @@ Case 1.1 ทดสอบเครื่องคิดเลขโหมด Stan
     FlaUILibrary.Click    //Button[@Name="Equals"]
 
     # ดึงค่าจากเครื่องคิดเลข
-    ${actual_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${actual_Result}    Get Name From Element    ${xpath_result_label}
 
     # ลบเครื่องหมายจุลภาค (,) ออกจากตัวเลข และตัด "Display is "
     ${actual_Result_Cleaned}    Evaluate    "${actual_Result}".replace('Display is ', '').replace(',', '').strip()
@@ -63,7 +64,7 @@ Case 1.2 คัดลอกผลลัพธ์และเปลี่ยน�
     END
 
     # ดึงค่าที่ถูกแปลงเป็นเลขฐานอื่นๆ ในโหมด Programmer
-    ${programmer_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${programmer_Result}    Get Name From Element    ${xpath_result_label}
     Log    ${programmer_Result}
 
     # ลบ "Display is " และเครื่องหมายจุลภาค (,) ออก
@@ -80,22 +81,22 @@ Case 1.3 ตรวจสอบค่าที่แปลงเป็นเล�
     # คลิกที่ปุ่ม HEX และดึงค่า
     FlaUILibrary.Click    //RadioButton[@AutomationId="hexButton"]
     Sleep    1.5s
-    ${HEX_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${HEX_Result}    Get Name From Element    ${xpath_result_label}
     
     # คลิกที่ปุ่ม DEC และดึงค่า
     FlaUILibrary.Click    //RadioButton[@AutomationId="decimalButton"]
     Sleep    1.5s
-    ${DEC_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${DEC_Result}    Get Name From Element    ${xpath_result_label}
 
     # คลิกที่ปุ่ม OCT และดึงค่า
     FlaUILibrary.Click    //RadioButton[@AutomationId="octolButton"]
     Sleep    1.5s
-    ${OCT_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${OCT_Result}    Get Name From Element    ${xpath_result_label}
 
     # คลิกที่ปุ่ม BIN และดึงค่า
     FlaUILibrary.Click    //RadioButton[@AutomationId="binaryButton"]
     Sleep    1.5s
-    ${BIN_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${BIN_Result}    Get Name From Element    ${xpath_result_label}
 
     # ลบช่องว่างและจุลภาคออกจากค่าที่ได้
     ${HEX_Cleaned}    Evaluate    "${HEX_Result}".replace('Display is ', '').replace(' ', '').replace(',', '').strip()
@@ -162,7 +163,7 @@ Case 1.5 ทดสอบการใช้หน่วยความจำ (Mem
     
     # กด MR เพื่อนำค่าที่บันทึกไว้กลับมา
     FlaUILibrary.Click    //Button[@Name="Memory recall"]
-    ${memory_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${memory_Result}    Get Name From Element    ${xpath_result_label}
     # ลบ "Display is " 
     ${memory_Result}    Evaluate    "${memory_Result}".replace('Display is ', '').strip()
 
@@ -189,9 +190,10 @@ Case 1.6 ทดสอบการคำนวณเปอร์เซ็นต�
     FlaUILibrary.Click    //Button[@AutomationId="num2Button"]
     FlaUILibrary.Click    //Button[@AutomationId="num5Button"]
     FlaUILibrary.Click    //Button[@Name="Percent"]
+    FlaUILibrary.Click    //Button[@Name="Percent"]
     FlaUILibrary.Click    //Button[@Name="Equals"]
 
-    ${percent_Result}    Get Name From Element    //Text[@AutomationId="CalculatorResults"]
+    ${percent_Result}    Get Name From Element    ${xpath_result_label}
     ${percent_Cleaned}    Evaluate    "${percent_Result}".replace('Display is ', '').replace(',', '').strip()
     
     Should Be Equal As Strings    ${percent_Cleaned}    12.5
@@ -205,6 +207,8 @@ Case 1.7 ทดสอบ Factorial และ Square Root
     Switch To Scientific Mode
 
     # ทดสอบ Factorial (5!)
+    Switch To Scientific Mode
+
     FlaUILibrary.Click    //Button[@AutomationId="num5Button"]
     FlaUILibrary.Click    //Button[@AutomationId="factorialButton"]
     FlaUILibrary.Click    //Button[@Name="Equals"]
@@ -227,13 +231,14 @@ Case 1.7 ทดสอบ Factorial และ Square Root
     ${sqrt_Cleaned}    Evaluate    "${sqrt_Result}".replace('Display is ', '').replace(',', '').strip()
 
     Should Be Equal As Strings    ${sqrt_Cleaned}    7
+    Should Be Equal As Strings    ${sqrt_Cleaned}    7
 
 
 Case 1.8 ทดสอบ Bitwise Operations (AND, OR, XOR, NOT)
     [Documentation]    ตรวจสอบว่าสามารถใช้ฟังก์ชัน Bitwise ได้ในโหมด Programmer
     [Tags]    เครื่องคิดเลข    โหมดโปรแกรมเมอร์    Bitwise
     Sleep    1.0s
-
+    
     Switch To Programmer Mode
     Sleep    0.5s
     FlaUILibrary.Click    //RadioButton[@AutomationId="binaryButton"]
@@ -264,5 +269,7 @@ Case 1.10 ปิดโปรแกรมเครื่องคิดเลข
     Sleep    1.0s
 
     # ปิดโปรแกรมเครื่องคิดเลขโดยคลิกปุ่มปิด
-    FlaUILibrary.Click    //Button[@AutomationId="Close"]
-    Sleep    2.0s
+    Switch To Standard Mode
+
+    FlaUILibrary.Focus    ${xpath_calculator_window}
+    Sleep    1.0s
